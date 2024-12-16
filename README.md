@@ -9,7 +9,7 @@ and reboots will be nearly instant.
 - VM State keeps on `saving` automatically every `10 seconds`.
 - There are buttons to manually `save` / `delete` vm state.
 
-Made possible with [copy/v86](https://github.com/copy/v86), [xterm](https://github.com/xtermjs/xterm.js), and [Vite](https://vite.dev).
+Made possible with [copy/v86](https://github.com/copy/v86), [humphd/browser-shell](https://github.com/humphd/browser-shell), [xterm](https://github.com/xtermjs/xterm.js), and [Vite](https://vite.dev).
 
 <img alt="screenshot-macbook" src="./public/example/mac.png" />
 
