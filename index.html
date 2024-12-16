@@ -8,13 +8,19 @@
 	</head>
 	<body>
 		<code>Browser Linux</code>
+
 		<div id="progress-bar-parent" hidden>
 			<label id="progress-bar-label" for="progress-bar">Downloading Linux:</label>
 			<progress id="progress-bar" value="0" max="100"></progress>
 		</div>
+
 		<div class="app-window">
 			<div id="terminal"></div>
 		</div>
+
+		<i id="state-save">manually save state</i>
+		<i id="state-delete">delete state</i>
+
 		<script src="/v86/libv86.js"></script>
 		<script type="module" src="/src/main.ts"></script>
 	</body>

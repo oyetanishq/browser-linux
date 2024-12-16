@@ -63,6 +63,7 @@ const saveState = async (state: number) => {
 };
 
 const getState = async () => await caches.open("vm-state").then((cache) => cache.match(cacheUrl));
+const deleteState = async () => await caches.open("vm-state").then((cache) => cache.delete(cacheUrl));
 const hasState = async () => await getState().then((response) => !!response);
 
 (async () => {
@@ -89,7 +90,7 @@ const hasState = async () => await getState().then((response) => !!response);
 		emulator = new (window as any).V86(vmOptions);
 		emulator.add_listener("download-progress", ({ loaded, total }: { loaded: number; total: number }) => {
 			document.getElementById("progress-bar-parent")!.hidden = false;
-			document.getElementsByTagName("progress")[0]!.value = (loaded / total) * 100;
+			document.getElementsByTagName("progress")[0].value = (loaded / total) * 100;
 
 			if (loaded / total >= 0.99) document.getElementById("progress-bar-parent")!.hidden = true;
 		});
@@ -109,6 +110,8 @@ const hasState = async () => await getState().then((response) => !!response);
 	emulator.add_listener("serial0-output-byte", (byte: number) => terminal.write(String.fromCharCode(byte)));
 
 	setInterval(async () => await saveState(await emulator.save_state()), 10 * 1000); // save state every 10 seconds.
+	document.getElementById("state-save")!.onclick = async () => await saveState(await emulator.save_state()).then(() => emulator.serial0_send("echo 'state saved'\n"));
+	document.getElementById("state-delete")!.onclick = async () => await deleteState().then(() => emulator.serial0_send("echo 'state deleted'\n"));
 
 	console.log({ terminal, emulator });
 })();
