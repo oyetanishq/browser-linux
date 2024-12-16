@@ -20,3 +20,16 @@ export const molokaiTheme = {
 	white: "#CCCCC6",
 	yellow: "#FD971F",
 };
+
+export const vmOptions = {
+	wasm_path: "v86/v86.wasm",
+	memory_size: 512 * 1024 * 1024,
+	vga_memory_size: 64 * 1024 * 1024,
+	bios: { url: "v86/bios/seabios.bin" },
+	vga_bios: { url: "v86/bios/vgabios.bin" },
+	cdrom: { url: "v86/images/linux.iso" },
+	autostart: true,
+	disable_mouse: true,
+	disable_keyboard: true,
+	disable_speaker: true,
+};

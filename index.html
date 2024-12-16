@@ -7,12 +7,12 @@
 		<title>Browser Linux</title>
 	</head>
 	<body>
-		<!-- xterm terminal -->
+		<code>Browser Linux</code>
+		<div id="progress-bar-parent" hidden>
+			<label id="progress-bar-label" for="progress-bar">Downloading Linux:</label>
+			<progress id="progress-bar" value="0" max="100"></progress>
+		</div>
 		<div class="app-window">
-			<div class="title-bar">
-				<i id="term-play" title="Start" class="material-icons md-48 inactive">play_circle_outline</i>
-				<i id="term-pause" title="Stop" class="material-icons md-48 inactive">pause_circle_outline</i>
-			</div>
 			<div id="terminal"></div>
 		</div>
 		<script src="/v86/libv86.js"></script>

@@ -2,7 +2,7 @@ import "./style.css";
 import "@xterm/xterm/css/xterm.css";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { molokaiTheme } from "./lib/constants";
+import { molokaiTheme, vmOptions } from "./lib/constants";
 
 const waitForSetpUpPrompt = async (emulator: any, terminal: Terminal): Promise<void> =>
 	new Promise((resolve) => {
@@ -45,40 +45,64 @@ const waitForSetpUpPrompt = async (emulator: any, terminal: Terminal): Promise<v
 		emulator.add_listener("serial0-output-byte", handleSerialCharData);
 	});
 
+const cacheUrl = new URL("bin/vm-state.bin", window.location as any as URL);
+const saveState = async (state: number) => {
+	const blob = new Blob([new Uint8Array(state)], { type: "application/octet-stream" });
+
+	const headers = new Headers();
+	headers.append("Content-Type", "application/octet-stream");
+	headers.append("Content-Length", blob.size.toString());
+
+	const request = new Request(cacheUrl, { method: "GET", headers });
+	const response = new Response(blob, { status: 200, statusText: "Linux VM machine state cached" });
+
+	await caches
+		.open("vm-state")
+		.then(async (cache) => await cache.put(request, response))
+		.catch((err) => console.error(err));
+};
+
+const getState = async () => await caches.open("vm-state").then((cache) => cache.match(cacheUrl));
+const hasState = async () => await getState().then((response) => !!response);
+
 (async () => {
 	const terminal = new Terminal({ theme: molokaiTheme });
 	const fitAddon = new FitAddon();
 
 	terminal.open(document.getElementById("terminal")!);
 	terminal.loadAddon(fitAddon);
+	terminal.reset();
 	fitAddon.fit();
+	window.onresize = () => fitAddon.fit();
 
-	window.onresize = () => {
-		fitAddon.fit();
-	};
+	let emulator: any = null;
 
-	const emulator = new (window as any).V86({
-		wasm_path: "v86/v86.wasm",
-		memory_size: 512 * 1024 * 1024,
-		vga_memory_size: 64 * 1024 * 1024,
-		bios: { url: "v86/bios/seabios.bin" },
-		vga_bios: { url: "v86/bios/vgabios.bin" },
-		cdrom: { url: "v86/images/linux.iso" },
-		autostart: true,
-		disable_mouse: true,
-		disable_keyboard: true,
-		disable_speaker: true,
-	});
+	try {
+		if (await hasState())
+			await getState()
+				.then((response) => response!.arrayBuffer())
+				.then((arrayBuffer) => URL.createObjectURL(new Blob([arrayBuffer], { type: "application/octet-stream" })))
+				.then((url) => (emulator = new (window as any).V86({ ...vmOptions, initial_state: { url } })));
+		else throw new Error("No old state found");
+	} catch (error) {
+		// something went wrong, making new state
+		emulator = new (window as any).V86(vmOptions);
+		emulator.add_listener("download-progress", ({ loaded, total }: { loaded: number; total: number }) => {
+			document.getElementById("progress-bar-parent")!.hidden = false;
+			document.getElementsByTagName("progress")[0]!.value = (loaded / total) * 100;
+
+			if (loaded / total >= 0.99) document.getElementById("progress-bar-parent")!.hidden = true;
+		});
+
+		await waitForSetpUpPrompt(emulator, terminal);
+		await saveState(await emulator.save_state());
+	}
 
 	(window as any).emulator = emulator;
 	(window as any).terminal = terminal;
 
 	terminal.reset();
-
-	await waitForSetpUpPrompt(emulator, terminal);
-
-	terminal.reset();
-	terminal.writeln("Linux 4.15.7. Shared browser filesystem mounted in /mnt.");
+	terminal.writeln("Linux 4.15.7.");
 	terminal.write("/ # ");
 
 	terminal.onKey(({ key }) => emulator.serial0_send(key));
