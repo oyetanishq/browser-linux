@@ -15,4 +15,4 @@ Made possible with [copy/v86](https://github.com/copy/v86), [xterm](https://gith
 
 ---
 
-check my other projects at [_**tanishqsingh.com**_](https://tanishqsingh.com).
+more project? [_**threejs journey**_](https://github.com/tanishq-singh-2407/threejs-journey).
