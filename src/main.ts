@@ -108,5 +108,7 @@ const hasState = async () => await getState().then((response) => !!response);
 	terminal.onKey(({ key }) => emulator.serial0_send(key));
 	emulator.add_listener("serial0-output-byte", (byte: number) => terminal.write(String.fromCharCode(byte)));
 
+	setInterval(async () => await saveState(await emulator.save_state()), 10 * 1000); // save state every 10 seconds.
+
 	console.log({ terminal, emulator });
 })();
