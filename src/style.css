@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald|Material+Icons");
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	color: #252525;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100dvh;
+	width: 100%;
+}
+
+body {
+	font-family: "Cardo", serif;
+}
+
+#terminal {
+	padding: 5px;
+	background-color: rgb(27, 29, 30);
+	overflow-x: scroll;
+}
+
+.app-window {
+	line-height: 1;
+	display: grid;
+	grid-template-columns: 100%;
+	max-width: min(80%, 800px);
+	width: 100%;
+}
+
+.title-bar {
+	font-size: 1.3em;
+	background-color: lightgray;
+	border: 1px solid darkgray;
+	padding: 10px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.title-bar i {
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+.inactive {
+	color: rgba(0, 0, 0, 0.26);
+}

@@ -7,8 +7,15 @@
 		<title>Browser Linux</title>
 	</head>
 	<body>
-		<div id="root"></div>
-		<script src="libv86.js"></script>
-		<script type="module" src="/src/main.tsx"></script>
+		<!-- xterm terminal -->
+		<div class="app-window">
+			<div class="title-bar">
+				<i id="term-play" title="Start" class="material-icons md-48 inactive">play_circle_outline</i>
+				<i id="term-pause" title="Stop" class="material-icons md-48 inactive">pause_circle_outline</i>
+			</div>
+			<div id="terminal"></div>
+		</div>
+		<script src="/v86/libv86.js"></script>
+		<script type="module" src="/src/main.ts"></script>
 	</body>
 </html>
