@@ -1,6 +1,6 @@
 <h1 align="center">Linux shell in browser.</h1>
 
-_**Demo:**_ [**browser-linux-gules.vercel.app**](https://browser-linux.tanishqsingh.com).
+_**Demo:**_ [**browser-linux.tanishqsingh.com**](https://browser-linux.tanishqsingh.com).
 
 When you open this first time, linux iso and some bios file has to be dowload which is less than 10 mb,
 After which stores the vm state in [cache storage](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
